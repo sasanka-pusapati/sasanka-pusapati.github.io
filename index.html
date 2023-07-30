@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Infant Mortality Rate Trend</title>
+  <script type="text/javascript" src="https://d3js.org/d3.v4.min.js"></script>
+  <script type="text/javascript" src="./scripts/chart.js"></script>
+
+  <style>
+
+    .message_box {
+      color: black;
+      text-align: center;
+      text-underline-style: wave;
+      width: 100%;
+      font-weight: bold;
+      margin: auto;
+      font-size: 23px;
+      padding: 2px;
+      padding-bottom: 5px;
+
+    }
+
+    .main_window {
+      width: 1750px;
+      height: 875px;
+      margin-right: auto;
+      margin-left: auto;
+      padding-right: 3px;
+      border-style: ridge;
+      border-width: 2px;
+      border-left: none;
+      border-right: none;
+      border-top: none;
+      border-color: forestgreen;
+      font-family: Helvetica;
+    }
+
+    .scene_box {
+      width: 100%;
+      display: inline-block;
+
+    }
+
+    .navigation_buttons_scene1 {
+      position: absolute;
+      top:5%;
+      left: 5%;
+      width: 120px;
+      display: flex;
+      align-items: center;
+      font-family: inherit;
+      font-weight: 500;
+      font-size: 16px;
+      padding: 0.7em 1.4em 0.7em 1.1em;
+      color: white;
+      border: none;
+      letter-spacing: 0.05em;
+      border-radius: 20em;
+      cursor: pointer;
+      user-select: none;
+    }
+
+
+    .navigation_buttons_scene2 {
+      position: absolute;
+      top:5%;
+      left: 12%;
+      width: 120px;
+      display: flex;
+      align-items: center;
+      font-family: inherit;
+      font-weight: 500;
+      font-size: 16px;
+      padding: 0.7em 1.4em 0.7em 1.1em;
+      color: white;
+      border: none;
+      letter-spacing: 0.05em;
+      border-radius: 20em;
+      cursor: pointer;
+      user-select: none;
+    }
+
+
+    .navigation_buttons_scene3 {
+      position: absolute;
+      top:5%;
+      left: 19%;
+      width: 120px;
+      display: flex;
+      align-items: center;
+      font-family: inherit;
+      font-weight: 500;
+      font-size: 16px;
+      padding: 0.7em 1.4em 0.7em 1.1em;
+      color: white;
+      border: none;
+      letter-spacing: 0.05em;
+      border-radius: 20em;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .navigation_box {
+      padding: 5px;
+      height: 50px;
+      width: auto;
+      margin-left: 40%;
+      alignment: center;
+
+    }
+
+    .caption_box {
+      width: 13%;
+      float: left;
+      height: 625px;
+      margin-top: 15px;
+      margin-left: 1.5%;
+      padding: 15px;
+      font-size: medium;
+      text-align: justify;
+      border-style: ridge;
+      border-width: 1px;
+      border-color: forestgreen;
+      border-radius: 10px;
+    }
+
+    .filter_box {
+      width: 14%;
+      float: left;
+      height: 645px;
+      margin-top: 15px;
+      padding: 5px;
+      border-style: ridge;
+      border-width: 1px;
+      border-color: forestgreen;
+      border-radius: 10px;
+      overflow-x: hidden;
+      overflow-y: scroll;
+      text-align: justify;
+      display: none;
+    }
+
+    .filter_with_scroll {
+      overflow-x: hidden;
+      overflow-y: auto;
+      text-align: justify;
+    }
+
+    .graph_box {
+      width: 68%;
+      float: left;
+      height: 650px;
+      padding: 6px;
+      margin-top: 15px;
+      alignment: center;
+      border-style: ridge;
+      border-width: 1px;
+      border-color: forestgreen;
+      border-radius: 10px;
+    }
+
+    .footer_box {
+      width: 68%;
+      float: bottom;
+      height: 90px;
+      padding: 10px;
+      margin-top: 675px;
+      margin-left: auto;
+      text-anchor: middle;
+      alignment: center;
+    }
+
+    .svg_viz {
+      alignment: left;
+    }
+    div.tooltip {
+      position: absolute;
+      text-align: left;
+      width: auto;
+      height: auto;
+      padding: 8px;
+      font: 15px Helvetica;
+      background: lightgreen;
+      border: 0px;
+      border-radius: 8px;
+      pointer-events: none;
+
+    }
+
+    .button {
+      display: flex;
+      align-items: center;
+      font-family: inherit;
+      font-weight: 500;
+      font-size: 16px;
+      padding: 0.em 1.9em 0.7em 1.1em;
+      color: white;
+      border: none;
+      letter-spacing: 0.05em;
+      border-radius: 20em;
+      cursor: pointer;
+      background-color: forestgreen;
+      text-align: center;
+      white-space: nowrap;
+      vertical-align: middle;
+      -webkit-user-select: none;
+      user-select: none;
+      line-height: 1.5;
+      width: 100px;
+      transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+    }
+    .button:active {
+      background-color: #3e8e41;
+      box-shadow: 0 5px #666;
+      transform: translateY(4px);
+    }
+
+  </style>
+</head>
+<body onload="onbodyload()">
+<div class="main_window">
+
+  <div class="message_box">
+    <u>Infant Mortality Rate (IMR) is still a concern in Africa and in some Poor Countries</u>
+  </div>
+  <div class="navigation_box">
+    <table>
+      <tr>
+        <td>
+          <div class="navigation_buttons_scene1">
+            <button id="scene1" type="button" class="navigation_buttons_scene1" onclick="onclickScene1()"><a>Scene1</a>
+            </button>
+          </div>
+        </td>
+        <td>
+          <div class="navigation_buttons_scene2">
+            <button id="scene2" type="button" class="navigation_buttons_scene2" onclick="onclickScene2()"><a>Scene2</a>
+            </button>
+          </div>
+        </td>
+        <td>
+          <div class="navigation_buttons_scene3">
+            <button id="scene3" type="button" class="navigation_buttons_scene3" onclick="onclickScene3()"><a>Scene3</a>
+            </button>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div id="scene_box_id" class="scene_box">
+
+    <div class="graph_box">
+      <div id="svg_viz" class="svg_viz">
+        <svg width="1100" height="650"></svg>
+      </div>
+    </div>
+    <div id="filter_country" class="filter_box">
+      <div>
+        <b>Select Country(s)</b>
+        <button type="button" class="button" onclick="onclickSelectAllFilter()"><a>Clear All</a></button>
+      </div>
+      <div id="filter_container" class="filter_with_scroll">
+      </div>
+    </div>
+    <div id="filter_region" class="filter_box">
+      <div>
+        <b>Select Group(s)</b>
+        <button type="button" class="button" onclick="onclickSelectAllFilter()"><a>Clear All</a></button>
+      </div>
+      <div id="filter_container_region" class="filter_with_scroll">
+      </div>
+    </div>
+    <div id="caption_box" class="caption_box">
+
+    </div>
+    <div id="footer_box" class="footer_box">
+    </div>
+
+  </div>
+
+</div>
+</body>
+</html>
